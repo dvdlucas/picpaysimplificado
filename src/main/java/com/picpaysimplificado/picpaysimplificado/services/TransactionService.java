@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.picpaysimplificado.picpaysimplificado.domain.Transaction.MyResponse;
 import com.picpaysimplificado.picpaysimplificado.domain.Transaction.Transaction;
 import com.picpaysimplificado.picpaysimplificado.domain.user.User;
 import com.picpaysimplificado.picpaysimplificado.dtos.TransactionDTO;
@@ -24,7 +26,10 @@ public class TransactionService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public void createTransaction(TransactionDTO transaction) throws Exception {
+    @Autowired
+    private NotificationService notificationService;
+
+    public Transaction createTransaction(TransactionDTO transaction) throws Exception {
         User sender = this.userService.findUserById(transaction.senderId());
         User receiver = this.userService.findUserById(transaction.receiverId());
 
@@ -45,14 +50,22 @@ public class TransactionService {
         this.repository.save(newTransaction);
         this.userService.saveUser(receiver);
         this.userService.saveUser(sender);
+
+        this.notificationService.sendNotifications(sender, "Transação realizada com sucesso");
+        this.notificationService.sendNotifications(receiver, "Transação recebida com sucesso");
+
+        return newTransaction;
     }
 
     public boolean authorizeTransaction(User sender, BigDecimal value) {
-        ResponseEntity<Map> authorizationResponse = restTemplate
-                .getForEntity("(https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc", Map.class);
+        ResponseEntity<MyResponse> authorizationResponse = restTemplate
+                .getForEntity("https://run.mocky.io/v3/5794d450-d2e2-4412-8131-73d0293ac1cc", MyResponse.class);
         if (authorizationResponse.getStatusCode() == HttpStatus.OK) {
+            String status = authorizationResponse.getBody().getStatus();
             return true;
-        } else
+        } else {
             return false;
+        }
     }
+
 }

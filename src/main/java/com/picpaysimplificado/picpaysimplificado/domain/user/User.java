@@ -14,6 +14,7 @@ import com.picpaysimplificado.picpaysimplificado.dtos.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "users")
@@ -21,6 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User {
     @Id
@@ -43,6 +45,7 @@ public class User {
         this.balance = data.balance();
         this.email = data.email();
         this.password = data.password();
+        this.document = data.document();
         this.userType = data.userType();
     }
 }
