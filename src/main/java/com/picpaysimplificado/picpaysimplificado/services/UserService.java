@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.picpaysimplificado.picpaysimplificado.domain.user.User;
 import com.picpaysimplificado.picpaysimplificado.domain.user.UserType;
 import com.picpaysimplificado.picpaysimplificado.dtos.UserDTO;
@@ -29,6 +31,7 @@ public class UserService {
         return this.repository.findUserById(id).orElseThrow(() -> new Exception("Usuário não encontrado"));
     }
 
+    @Transactional
     public User createUser(UserDTO data) {
         User newUser = new User(data);
         this.saveUser(newUser);

@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NonNull;
 
 @Entity(name = "users")
 @Table(name = "users")
@@ -28,14 +29,28 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NonNull
     private String firstName;
+
+    @NonNull
     private String lastName;
+
+    @NonNull
     @Column(unique = true)
     private String document;
+
+    @NonNull
     @Column(unique = true)
     private String email;
+
+    @NonNull
     private String password;
+
+    @NonNull
     private BigDecimal balance;
+
+    @NonNull
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
