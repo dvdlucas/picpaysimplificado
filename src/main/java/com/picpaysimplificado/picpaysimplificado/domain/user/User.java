@@ -10,19 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import com.picpaysimplificado.picpaysimplificado.dtos.UserDTO;
-
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.NonNull;
 
 @Entity(name = "users")
 @Table(name = "users")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User {
@@ -30,27 +26,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     private String firstName;
 
-    @NonNull
     private String lastName;
 
-    @NonNull
     @Column(unique = true)
     private String document;
 
-    @NonNull
     @Column(unique = true)
     private String email;
 
-    @NonNull
     private String password;
 
-    @NonNull
     private BigDecimal balance;
 
-    @NonNull
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
@@ -62,5 +51,46 @@ public class User {
         this.password = data.password();
         this.document = data.document();
         this.userType = data.userType();
+    }
+
+    public void setFirstName(String firstName) {
+        validateNonNull(firstName);
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        validateNonNull(lastName);
+        this.lastName = lastName;
+    }
+
+    public void setDocument(String document) {
+        validateNonNull(document);
+        this.document = document;
+    }
+
+    public void setEmail(String email) {
+        validateNonNull(email);
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        validateNonNull(password);
+        this.password = password;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        validateNonNull(balance);
+        this.balance = balance;
+    }
+
+    public void setUserType(UserType userType) {
+        validateNonNull(userType);
+        this.userType = userType;
+    }
+
+    private void validateNonNull(Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Value cannot be null");
+        }
     }
 }
